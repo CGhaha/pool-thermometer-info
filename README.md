@@ -1,1 +1,1 @@
-# pool-thermometer-info
+# info-platform
