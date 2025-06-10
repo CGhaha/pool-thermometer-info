@@ -1,23 +1,130 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PI号码查询</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        #codeInput {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+        
+        #codeInput:focus {
+            border-color: #1a75ff;
+        }
+        
+        #codeInput::placeholder {
+            color: #999;
+        }
+        
+        #searchBtn {
+            background: #1a75ff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+        
+        #searchBtn:hover {
+            background: #0066cc;
+        }
+        
+        #searchBtn:active {
+            background: #00a651;
+            transform: translateY(2px);
+        }
+        
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            min-height: 60px;
+            text-align: left;
+        }
+    </style>
+</head>
 <body>
-  <input type="text" id="codeInput" placeholder="输入编号">
-  <button onclick="search()">查询</button>
-  <div id="result"></div>
+    <div class="container">
+        <input type="text" id="codeInput" placeholder="请输入完整的PI号码">
+        <button id="searchBtn">TACK</button>
+        <div id="result">查询结果将显示在这里</div>
+    </div>
 
-  <script>
-    async function search() {
-      const code = document.getElementById('codeInput').value;
-      const apiUrl = `https://script.google.com/macros/s/AKfycbwPYOeRqFwSYjjznF9yd859n9vwJw5PY8h8V2extxWYSzafREsDX87ZmtNp_24863oWRA/exec?code=${code}`;
-      
-      try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        document.getElementById('result').innerText = data.info || "未找到信息";
-      } catch (error) {
-        console.error('查询失败:', error);
-      }
-    }
-  </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchBtn = document.getElementById('searchBtn');
+            const codeInput = document.getElementById('codeInput');
+            const resultDiv = document.getElementById('result');
+            
+            searchBtn.addEventListener('click', function() {
+                // 按钮点击效果
+                this.style.backgroundColor = '#00a651';
+                setTimeout(() => {
+                    this.style.backgroundColor = '#1a75ff';
+                }, 200);
+                
+                // 检查输入
+                const code = codeInput.value.trim();
+                if (!code) {
+                    resultDiv.innerHTML = '<span style="color: red;">请输入PI号码</span>';
+                    return;
+                }
+                
+                // 调用API
+                const apiUrl = `https://script.google.com/macros/s/AKfycbwPYOeRqFwSYjjznF9yd859n9vwJw5PY8h8V2extxWYSzafREsDX87ZmtNp_24863oWRA/exec?code=${code}`;
+                
+                fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        resultDiv.innerHTML = data.info 
+                            ? `<strong>查询结果：</strong>${data.info}`
+                            : '<span style="color: red;">未找到匹配信息</span>';
+                    })
+                    .catch(error => {
+                        console.error('查询失败:', error);
+                        resultDiv.innerHTML = '<span style="color: red;">查询服务暂时不可用</span>';
+                    });
+            });
+        });
+    </script>
 </body>
 </html>
