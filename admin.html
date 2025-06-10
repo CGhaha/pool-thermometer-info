@@ -1,0 +1,36 @@
+<!-- 管理页密码：admin123 -->
+<!DOCTYPE html>
+<html>
+<body>
+  <h2>数据管理</h2>
+  <input type="password" id="password" placeholder="管理密码">
+  <button onclick="login()">登录</button>
+  
+  <div id="editor" style="display:none">
+    <input type="text" id="newCode" placeholder="编号">
+    <textarea id="newInfo" placeholder="信息内容"></textarea>
+    <button onclick="saveData()">保存</button>
+  </div>
+
+  <script>
+    function login() {
+      if(document.getElementById('password').value === 'admin123') {
+        document.getElementById('editor').style.display = 'block';
+      }
+    }
+    
+    async function saveData() {
+      const payload = {
+        code: document.getElementById('newCode').value,
+        info: document.getElementById('newInfo').value
+      };
+      
+      await fetch('YOUR_GOOGLE_SCRIPT_URL', {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+      alert('保存成功！');
+    }
+  </script>
+</body>
+</html>
